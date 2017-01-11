@@ -1486,24 +1486,13 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
 	 */
 	private function getApplicationTokenAndSecret($sUser=self::_sDefaultUsername)
 	{
-		$oToken = NULL;
-		$sSecret = NULL;
-		if(class_exists('Immocaster_Data_Mysql') && $oData = Immocaster_Data_Mysql::getInstance()->getApplicationToken($sUser))
-		{
-			if($oData->ic_key!='')
-			{
-				$oToken = new OAuthToken
-				(
-					$oData->ic_key,
-					$oData->ic_secret
-				);
-				$sSecret = $oData->ic_secret;
-			}
-			else
-			{
-				return null;
-			}
-		}
+        $oToken = new OAuthToken
+        (
+            env('IMMOBILIENSCOUT24_ACCESS_TOKEN'),
+            env('IMMOBILIENSCOUT24_SECRET')
+        );
+        $sSecret = env('IMMOBILIENSCOUT24_SECRET');
+
 		return array($oToken, $sSecret);
 	}
 
