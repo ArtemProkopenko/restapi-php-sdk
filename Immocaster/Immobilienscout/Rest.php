@@ -596,6 +596,33 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
 		return parent::getContent($req,$sSecret);
 	}
 
+    /**
+     * Kontakt eines Users über ContactId abfragen.
+     * (Hierfür müssen besondere Berechtigungen
+     * bei ImmobilienScout24 beantragt werden.)
+     *
+     * @param array $aArgs
+     * @return mixed
+     */
+    private function _getContacts($aArgs)
+    {
+        $aRequired = array('username');
+        $oToken = null;
+        $sSecret = null;
+        if(!isset($aArgs['username']))
+        {
+            $aArgs['username'] = $this->_sDefaultUsername;
+        }
+        list($oToken, $sSecret) = $this->getApplicationTokenAndSecret($aArgs['username']);
+        if($oToken === NULL || $sSecret === NULL)
+        {
+            return IMMOCASTER_SDK_LANG_APPLICATION_NOT_CERTIFIED;
+        }
+        $req = $this->doRequest('offer/v1.0/user/'.$aArgs['username'].'/contact',$aArgs,$aRequired,__FUNCTION__,$oToken);
+        $req->unset_parameter('username');
+        return parent::getContent($req,$sSecret);
+    }
+
 	/**
 	 * Kontaktinformation zu ImmobilienScout24 exportieren.
 	 * (Hierfür müssen besondere Berechtigungen bei ImmobilienScout24 beantragt werden.
