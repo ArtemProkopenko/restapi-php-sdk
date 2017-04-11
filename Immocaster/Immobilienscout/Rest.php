@@ -132,6 +132,23 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
 		return true;
 	}
 
+    /**
+     * Ergebnisformat setzen (z.B. 'none','json').
+     *
+     * @param string $sContentResultType Formatierung des Ergebnisses
+     * @return boolean
+     */
+    public function setContentRequestType($sContentResultType='none')
+    {
+        if(strtolower($sContentResultType)=='json')
+        {
+            $this->_sContentRequestType = 'json';
+            return true;
+        }
+        $this->_sContentRequestType = 'none';
+        return true;
+    }
+
 	/**
      * Haupt-URL für Requests zum Service ändern.
 	 *
