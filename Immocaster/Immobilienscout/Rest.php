@@ -859,7 +859,12 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
         if ($oToken === null || $sSecret === null) {
             return IMMOCASTER_SDK_LANG_APPLICATION_NOT_CERTIFIED;
         }
-        if (($aArgs['type'] == 'Picture' or $aArgs['type'] == 'PDFDocument') && (!is_file($aArgs['file']) || isset($aArgs['filedata']))) {
+        if (($aArgs['type'] == 'Picture' && $aArgs['type'] == 'PDFDocument') &&
+            (
+                isset($aArgs['filedata']) ||
+                (isset($aArgs['file']) && !is_file($aArgs['file']))
+            )
+        ) {
             return sprintf(IMMOCASTER_SDK_LANG_FILE_NOT_FOUND, $aArgs['file']);
         }
         $sMimeBoundary = md5(time());

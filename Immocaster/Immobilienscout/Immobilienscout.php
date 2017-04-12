@@ -284,9 +284,9 @@ class Immocaster_Immobilienscout
             } else {
                 $fp = fopen($aArgs['file'], 'rb');
                 $sFileContent = fread($fp, filesize($aArgs['file']));
+                fclose($fp);
             }
 
-            fclose($fp);
             if (version_compare(phpversion(), '5.3', '>=')) {
                 $aFileInfo = finfo_open(FILEINFO_MIME_TYPE);
                 $aFileInfoMime = finfo_file($aFileInfo, $aArgs['file']);
