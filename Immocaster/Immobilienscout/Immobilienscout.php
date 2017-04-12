@@ -281,26 +281,28 @@ class Immocaster_Immobilienscout
         } else {
             if (isset($aArgs['filedata'])) {
                 $sFileContent = $aArgs['filedata'];
+                $aFileInfoMime = $this->getMimeContentType($aArgs['file']);
             } else {
                 $fp = fopen($aArgs['file'], 'rb');
                 $sFileContent = fread($fp, filesize($aArgs['file']));
                 fclose($fp);
-            }
 
-            if (version_compare(phpversion(), '5.3', '>=')) {
-                $aFileInfo = finfo_open(FILEINFO_MIME_TYPE);
-                $aFileInfoMime = finfo_file($aFileInfo, $aArgs['file']);
-            } else {
-                if (function_exists('mime_content_type') && $aFileInfoMime = mime_content_type($aArgs['file'])) {
-                    $aFileInfoMime = mime_content_type($aArgs['file']);
+                if (version_compare(phpversion(), '5.3', '>=')) {
+                    $aFileInfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $aFileInfoMime = finfo_file($aFileInfo, $aArgs['file']);
                 } else {
-                    if ($aFileInfos = getimagesize($aArgs['file'])) {
-                        $aFileInfoMime = $aFileInfos['mime'];
+                    if (function_exists('mime_content_type') && $aFileInfoMime = mime_content_type($aArgs['file'])) {
+                        $aFileInfoMime = mime_content_type($aArgs['file']);
                     } else {
-                        $aFileInfoMime = $this->getMimeContentType($aArgs['file']);
+                        if ($aFileInfos = getimagesize($aArgs['file'])) {
+                            $aFileInfoMime = $aFileInfos['mime'];
+                        } else {
+                            $aFileInfoMime = $this->getMimeContentType($aArgs['file']);
+                        }
                     }
                 }
             }
+
 
 
             $sBreak = "\r\n";
@@ -391,7 +393,13 @@ class Immocaster_Immobilienscout
             'odt' => 'application/vnd.oasis.opendocument.text',
             'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
         ];
-        $ext = strtolower(array_pop(explode('.', $filename)));
+        $parts = explode('.', $filename);
+        $ext = strtolower(array_pop($parts));
+
+        if (array_key_exists($ext, $mime_types)) {
+            return $mime_types[$ext];
+        }
+
 
         if (function_exists('finfo_open')) {
             $finfo = finfo_open(FILEINFO_MIME);
