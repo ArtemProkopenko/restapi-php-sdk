@@ -156,6 +156,7 @@ class Immocaster_Immobilienscout
             if ($this->_bRequestDebug == true) {
                 $this->_debugLog[] = [
                     'url' => $req->to_url(),
+                    'method' => $req->get_normalized_http_method(),
                     'body' => $req->get_parameter('request_body')
                 ];
 
