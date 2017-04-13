@@ -159,8 +159,6 @@ class Immocaster_Immobilienscout
                     'method' => $req->get_normalized_http_method(),
                     'body' => $req->get_parameter('request_body')
                 ];
-
-                return;
             }
             if ($req->get_normalized_http_method() == 'POST' || $req->get_normalized_http_method() == 'PUT') {
                 $requestBody = $req->get_parameter('request_body');
@@ -205,13 +203,13 @@ class Immocaster_Immobilienscout
                 }
                 $result = curl_exec($ch);
                 // Return information
-                if ($this->_bRequestDebug == true) {
+                /*if ($this->_bRequestDebug == true) {
                     return [
                         'info' => curl_getinfo($ch),
                         'body' => $requestBody,
                         'response' => $result
                     ];
-                }
+                }*/
                 // Close curl
                 curl_close($ch);
             }
