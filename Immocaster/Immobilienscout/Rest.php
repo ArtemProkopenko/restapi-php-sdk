@@ -58,21 +58,26 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
      /**
       * Proxy
       **/
-     protected $_sProxyName = NULL;
-     protected $_sProxyPort = NULL;
+    protected $_sProxyName = null;
+    protected $_sProxyPort = null;
+    protected $_accessToken;
+    protected $_accessSecret;
 
-	/**
+    /**
      * Der Constructor legt die Einstellungen für die
-	 * Verbindung fest und startet diese.
+     * Verbindung fest und startet diese.
      *
-	 * @param string $sKey Key für diesen Service
-	 * @param string $sSecret Secret für diesen Service
-	 * @param string $sAuth Typ der Authentifizierung für den Service
+     * @param string $sKey Key für diesen Service
+     * @param string $sSecret Secret für diesen Service
+     * @param string $sAuth Typ der Authentifizierung für den Service
      * @return void
      */
-    public function __construct($sKey,$sSecret,$sAuth)
+    public function __construct($sKey, $sSecret, $sAuth, $accessToken, $accessSecret)
     {
-		parent::connectService($sKey,$sSecret,$sAuth);
+        $this->_accessToken = $accessToken;
+        $this->_accessSecret = $accessSecret;
+
+        parent::connectService($sKey, $sSecret, $sAuth);
     }
 
 	/**
@@ -1558,10 +1563,10 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
 	{
         $oToken = new OAuthToken
         (
-            env('IMMOBILIENSCOUT24_ACCESS_TOKEN'),
-            env('IMMOBILIENSCOUT24_SECRET')
+            $this->_accessToken,
+            $this->_accessSecret
         );
-        $sSecret = env('IMMOBILIENSCOUT24_SECRET');
+        $sSecret = $this->_accessSecret;
 
 		return array($oToken, $sSecret);
 	}
