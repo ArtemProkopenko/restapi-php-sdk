@@ -352,6 +352,32 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
 		return parent::getContent($req);
 	}
 
+
+    private function _geoInfo($aArgs)
+    {
+        $sSearchQuery = 'gis/v1.0/continent';
+        if(isset($aArgs['continent-id']))
+        {
+            $sSearchQuery .= '/'.$aArgs['continent-id'] . '/country';
+            unset($aArgs['continent-id']);
+        }
+
+        if(isset($aArgs['country-id']))
+        {
+            $sSearchQuery .= '/'.$aArgs['country-id'] . '/region';
+            unset($aArgs['country-id']);
+        }
+        if(isset($aArgs['region-id']))
+        {
+            $sSearchQuery .= '/region/'.$aArgs['region-id'];
+            unset($aArgs['region-id']);
+        }
+
+        $req = $this->doRequest($sSearchQuery,$aArgs,[],__FUNCTION__);
+
+        return parent::getContent($req);
+    }
+
 	/**
      * Abfrage eines Exposes (Search-API)
 	 * mit der Objekt-ID.
