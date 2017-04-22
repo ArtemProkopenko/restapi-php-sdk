@@ -72,12 +72,18 @@ class Immocaster_Immobilienscout_Rest extends Immocaster_Immobilienscout
      * @param string $sAuth Typ der Authentifizierung für den Service
      * @return void
      */
-    public function __construct($sKey, $sSecret, $sAuth, $accessToken, $accessSecret)
+    public function __construct($sKey, $sSecret, $sAuth, $accessToken = null, $accessSecret = null)
     {
         $this->_accessToken = $accessToken;
         $this->_accessSecret = $accessSecret;
 
         parent::connectService($sKey, $sSecret, $sAuth);
+    }
+
+    public function setAccessToken($data)
+    {
+        $this->_accessToken = $data['accessToken'];
+        $this->_accessSecret = $data['accessSecret'];
     }
 
 	/**
